@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy and publish
-        run: ./deploy.sh
+        run: ls && pwd && ./deploy.sh
         env:
           NODE_ENV: production
