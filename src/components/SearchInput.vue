@@ -1,0 +1,56 @@
+<template>
+  <div class="form-group mr-2 ml-2">
+    <div class="row">
+      <div class="col offset-md-2 col-md-6">
+        <input
+          v-model="searchPhrase"
+          @keyup.enter="searchTable"
+          type="text"
+          class="form-control"
+          id="searchField"
+          aria-describedby="searchHelp"
+          placeholder="Enter search phrase"
+        />
+      </div>
+      <div class="col col-md-2">
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          @click="searchTable"
+        >
+          Search
+        </button>
+      </div>
+    </div>
+    <small id="searchHelp" class="form-text text-muted"
+      >Enter phrase and hit enter to add phrase to list of searched words</small
+    >
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "SearchInput",
+    data() {
+      return {
+        searchPhrase: ''
+      }
+    },
+    methods: {
+      searchTable() {
+        this.$emit('searchTable');
+      }
+    }
+  };
+</script>
+
+<style>
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
+</style>

@@ -9,6 +9,7 @@
       @searchToggled="toggleSearch"
       class="mb-3"
     />
+    <SearchInput v-show="this.searchIsOn" />
     <table class="table">
       <thead>
         <tr>
@@ -34,11 +35,11 @@
 
 <script>
   import TableSettings from "./TableSettings";
-
+  import SearchInput from "./SearchInput";
   export default {
     name: 'Table',
     components: {
-      TableSettings
+      TableSettings, SearchInput
     },
     data() {
       return {
