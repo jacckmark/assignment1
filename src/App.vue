@@ -1,18 +1,22 @@
 <template>
   <div id="app">
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+    <Table :endpoint="this.tableUrl" />
   </div>
 </template>
 
 <script>
-  import HelloWorld from './components/HelloWorld.vue'
-
+  import Table from "./components/Table";
   export default {
-    name: 'App',
+    name: "App",
     components: {
-      HelloWorld
-    }
-  }
+      Table,
+    },
+    data() {
+      return {
+        tableUrl: "https://jsonplaceholder.typicode.com/users",
+      };
+    },
+  };
 </script>
 
 <style>
