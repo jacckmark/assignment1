@@ -1,0 +1,13 @@
+name: Deploy to Staging Environment
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build_app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy and publish
+        run: ./deploy.sh
+        env:
+          NODE_ENV: production
