@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container-fluid">
     <TableSettings
       :search-is-on="this.searchIsOn"
       :sort-is-on="this.sortIsOn"
@@ -10,26 +10,34 @@
       class="mb-3"
     />
     <SearchInput v-show="this.searchIsOn" />
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Email</th>
-          <th scope="col">Company name</th>
-          <th scope="col">City</th>
-          <th scope="col">Website</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="row justify-content-center" v-if="usersList.length">
+      <div class="col col-md-10">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Company name</th>
+              <th scope="col">City</th>
+              <th scope="col">Website</th>
+            </tr>
+          </thead>
+          <tbody v-for="user of usersList" :key="user.id">
+            <tr>
+              <th scope="row">{{ user.id }}</th>
+              <td>{{ user.name }}</td>
+              <td>
+                <a :href="`mailto:${user.email}`">{{ user.email }}</a>
+              </td>
+              <td>{{ user.company.name }}</td>
+              <td>{{ user.address.city }}</td>
+              <td>{{ user.website }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,7 +53,8 @@
       return {
         searchIsOn: this.search,
         sortIsOn: this.sorting,
-        paginationIsOn: this.pagination
+        paginationIsOn: this.pagination,
+        usersList: []
       }
     },
     props: {
@@ -64,9 +73,17 @@
       pagination: {
         type: Boolean,
         default: false
-      },
+      }
+    },
+    mounted() {
+      this.getUsers(this.endpoint);
     },
     methods: {
+      getUsers(url) {
+        this.axios.get(url).then(res => {
+          this.usersList = res.data;
+        }).catch(err => console.log(err))
+      },
       toggleSort() {
         this.sortIsOn = !this.sortIsOn;
       },
@@ -76,14 +93,11 @@
       togglePagin() {
         this.paginationIsOn = !this.paginationIsOn;
       }
+    },
+    computed: {
+
     }
   }
 </script>
 
-<style lang="scss" scoped>
-  .dupa {
-    .kkk {
-      background-color: red;
-    }
-  }
-</style>
+<style lang="scss" scoped></style>
