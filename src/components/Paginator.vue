@@ -32,7 +32,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .pagination .page-item {
     cursor: pointer;
   }

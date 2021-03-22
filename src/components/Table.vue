@@ -14,55 +14,33 @@
       <div class="col col-md-10">
         <table class="table">
           <thead>
-            <tr @click="sortColumn">
-              <th scope="col">#</th>
-              <th scope="col">
-                Name
-                <font-awesome-icon
-                  v-show="sortIsOn"
-                  :icon="['fas', 'angle-down']"
-                />
-              </th>
-              <th scope="col">
-                Email
-                <font-awesome-icon
-                  v-show="sortIsOn"
-                  :icon="['fas', 'angle-down']"
-                />
-              </th>
-              <th scope="col">
-                Company name
-                <font-awesome-icon
-                  v-show="sortIsOn"
-                  :icon="['fas', 'angle-down']"
-                />
-              </th>
-              <th scope="col">
-                City
-                <font-awesome-icon
-                  v-show="sortIsOn"
-                  :icon="['fas', 'angle-down']"
-                />
-              </th>
-              <th scope="col">
-                Website
-                <font-awesome-icon
-                  v-show="sortIsOn"
-                  :icon="['fas', 'angle-down']"
-                />
-              </th>
+            <tr>
+              <TableHeader
+                v-for="(column, index) of sortedTableColumns"
+                :key="index"
+                :name="column.name"
+                :isSortingOn="sortIsOn"
+              />
             </tr>
           </thead>
           <tbody v-for="user of usersList" :key="user.id">
             <tr>
-              <th scope="row">{{ user.id }}</th>
-              <td>{{ user.name }}</td>
+              <td
+                v-for="(column, index) of sortedTableColumns"
+                :key="index"
+                scope="row"
+              >
+                <span
+                  v-html="renderTableCell(user, column.propertyPath)"
+                ></span>
+              </td>
+              <!-- <td>{{ user.name }}</td>
               <td>
                 <a :href="`mailto:${user.email}`">{{ user.email }}</a>
               </td>
               <td>{{ user.company.name }}</td>
               <td>{{ user.address.city }}</td>
-              <td>{{ user.website }}</td>
+              <td>{{ user.website }}</td> -->
             </tr>
           </tbody>
         </table>
@@ -73,6 +51,9 @@
         />
       </div>
     </div>
+    <div v-if="!isUsersListNotEmpty">
+      nothing to show <font-awesome-icon :icon="['fas', 'sad-cry']" />
+    </div>
   </div>
 </template>
 
@@ -80,11 +61,13 @@
   import TableSettings from "./TableSettings";
   import SearchInput from "./SearchInput";
   import Paginator from "./Paginator";
+  import TableHeader from "./TableHeader";
+  import ObjUtils from "@/utils/objUtils";
 
   export default {
     name: 'Table',
     components: {
-      TableSettings, SearchInput, Paginator
+      TableSettings, SearchInput, Paginator, TableHeader
     },
     data() {
       return {
@@ -112,6 +95,10 @@
       sorting: {
         type: Boolean,
         default: false
+      },
+      tableColumns: {
+        type: Array,
+        default: (() => [])
       }
     },
     async mounted() {
@@ -135,20 +122,9 @@
           console.log(err);
         }
       },
-      toggleSort() {
-        this.sortIsOn = !this.sortIsOn;
-      },
-      toggleSearch() {
-        this.searchIsOn = !this.searchIsOn;
-      },
       async togglePagin() {
         this.paginationIsOn = !this.paginationIsOn;
         this.usersList = await this.getUsers(this.endpoint, 1);
-      },
-      sortColumn(event) {
-        if (this.sortIsOn) {
-          console.log(event.target);
-        }
       },
       async filterUsers(phrase) {
         if (phrase) {
@@ -162,11 +138,30 @@
         } else {
           this.usersList = await this.getUsers(this.endpoint);
         }
+      },
+      toggleSort() {
+        this.sortIsOn = !this.sortIsOn;
+      },
+      toggleSearch() {
+        this.searchIsOn = !this.searchIsOn;
+      },
+      renderTableCell(object, path) {
+        const propValue = ObjUtils.safeRead(object, path);
+        console.log(propValue)
+        if (propValue.toString().includes('@') || path.toString().includes('mail')) {
+          return `<a href="mailto:${propValue}">${propValue}</a>`;
+        } else {
+          return `<span>${propValue}</span>`;
+        }
       }
     },
     computed: {
       isUsersListNotEmpty() {
         return this.usersList?.length;
+      },
+      sortedTableColumns() {
+        const columnsCopy = JSON.parse(JSON.stringify(this.tableColumns));
+        return columnsCopy.sort((a, b) => a.order - b.order);
       }
     }
   }

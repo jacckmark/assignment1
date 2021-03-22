@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Table :endpoint="this.tableUrl" />
+    <Table :endpoint="this.tableUrl" :tableColumns="columns" />
   </div>
 </template>
 
@@ -14,6 +14,15 @@
     data() {
       return {
         tableUrl: "https://jsonplaceholder.typicode.com/users",
+        columns: [
+          { name: "Name", order: 2, propertyPath: "name" },
+          { name: "#", order: 1, propertyPath: "id" },
+          { name: "Email", order: 3, propertyPath: "email" },
+          { name: "Company name", order: 5, propertyPath: "company.name" },
+          { name: "City", order: 4, propertyPath: "address.city" },
+          { name: "Website", order: 7, propertyPath: "website" },
+          { name: "Phone", order: 6, propertyPath: "phone" },
+        ]
       };
     },
   };
