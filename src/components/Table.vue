@@ -11,7 +11,7 @@
     />
     <SearchInput v-show="this.searchIsOn" @searchTable="filterUsers($event)" />
     <div class="row justify-content-center" v-if="isUsersListNotEmpty">
-      <div class="col col-md-10">
+      <div class="col col-xl-10">
         <table class="table">
           <thead>
             <tr>
