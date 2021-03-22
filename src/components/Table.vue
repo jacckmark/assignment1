@@ -19,7 +19,9 @@
                 v-for="(column, index) of sortedTableColumns"
                 :key="index"
                 :name="column.name"
+                :propertyPath="column.propertyPath"
                 :isSortingOn="sortIsOn"
+                @sortColumn="sortByColumn"
               />
             </tr>
           </thead>
@@ -134,8 +136,22 @@
       async changePage($event) {
         this.usersList = await this.getUsers(this.endpoint, $event);
       },
-      toggleSort() {
+      async sortByColumn(propName, isSortedAsc) {
+        let users = await this.getUsers(this.endpoint, propName);
+        users.sort((a, b) => {
+          if (isSortedAsc) {
+            return ObjUtils.safeRead(a, propName) < ObjUtils.safeRead(b, propName) ? -1 : 1;
+          } else {
+            return ObjUtils.safeRead(b, propName) < ObjUtils.safeRead(a, propName) ? -1 : 1
+          }
+        })
+        this.usersList = users;
+      },
+      async toggleSort() {
         this.sortIsOn = !this.sortIsOn;
+        if (!this.sortIsOn) {
+          this.usersList = await this.getUsers(this.endpoint)
+        }
       },
       toggleSearch() {
         this.searchIsOn = !this.searchIsOn;

@@ -13,19 +13,26 @@
         type: String,
         required: true
       },
+      propertyPath: {
+        type: String,
+        required: true
+      },
       isSortingOn: {
         type: Boolean,
         required: true
-      },
-      isSortedAsc: {
-        type: Boolean,
-        default: false
+      }
+    },
+    data() {
+      return {
+        isSortedAsc: false
       }
     },
     methods: {
       sortColumn(event) {
         if (this.isSortingOn) {
           console.log(event.target);
+          this.isSortedAsc = !this.isSortedAsc;
+          this.$emit('sortColumn', this.propertyPath, this.isSortedAsc);
         }
       },
     },
