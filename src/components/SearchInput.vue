@@ -23,7 +23,7 @@
       </div>
     </div>
     <small id="searchHelp" class="form-text text-muted"
-      >Enter phrase and hit enter to add phrase to list of searched words</small
+      >Enter phrase and hit enter to search</small
     >
   </div>
 </template>
@@ -38,7 +38,7 @@
     },
     methods: {
       searchTable() {
-        this.$emit('searchTable');
+        this.$emit('searchTable', this.searchPhrase);
       }
     }
   };
