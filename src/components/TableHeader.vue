@@ -28,9 +28,8 @@
       }
     },
     methods: {
-      sortColumn(event) {
+      sortColumn() {
         if (this.isSortingOn) {
-          console.log(event.target);
           this.isSortedAsc = !this.isSortedAsc;
           this.$emit('sortColumn', this.propertyPath, this.isSortedAsc);
         }
