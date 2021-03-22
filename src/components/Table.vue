@@ -5,7 +5,7 @@
       :sort-is-on="this.sortIsOn"
       :pagination-is-on="this.paginationIsOn"
       @sortToggled="toggleSort"
-      @paginToggled="togglePagin"
+      @paginToggled="togglePagination"
       @searchToggled="toggleSearch"
       class="mb-3"
     />
@@ -34,18 +34,11 @@
                   v-html="renderTableCell(user, column.propertyPath)"
                 ></span>
               </td>
-              <!-- <td>{{ user.name }}</td>
-              <td>
-                <a :href="`mailto:${user.email}`">{{ user.email }}</a>
-              </td>
-              <td>{{ user.company.name }}</td>
-              <td>{{ user.address.city }}</td>
-              <td>{{ user.website }}</td> -->
             </tr>
           </tbody>
         </table>
         <Paginator
-          @changePage="getUsers(endpoint, $event)"
+          @changePage="changePage"
           :totalPages="totalPageAmount"
           v-show="paginationIsOn"
         />
@@ -113,7 +106,6 @@
         }
         try {
           const response = await this.axios.get(queryUrl);
-          console.log(response)
           if (response?.headers?.["x-total-count"]) {
             this.totalPageAmount = parseInt(response.headers["x-total-count"] / this.defaultPageSize);
           }
@@ -122,7 +114,7 @@
           console.log(err);
         }
       },
-      async togglePagin() {
+      async togglePagination() {
         this.paginationIsOn = !this.paginationIsOn;
         this.usersList = await this.getUsers(this.endpoint, 1);
       },
@@ -139,6 +131,9 @@
           this.usersList = await this.getUsers(this.endpoint);
         }
       },
+      async changePage($event) {
+        this.usersList = await this.getUsers(this.endpoint, $event);
+      },
       toggleSort() {
         this.sortIsOn = !this.sortIsOn;
       },
@@ -147,7 +142,6 @@
       },
       renderTableCell(object, path) {
         const propValue = ObjUtils.safeRead(object, path);
-        console.log(propValue)
         if (propValue.toString().includes('@') || path.toString().includes('mail')) {
           return `<a href="mailto:${propValue}">${propValue}</a>`;
         } else {
