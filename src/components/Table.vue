@@ -66,11 +66,11 @@
         type: Boolean,
         default: false
       },
-      sorting: {
+      pagination: {
         type: Boolean,
         default: false
       },
-      pagination: {
+      sorting: {
         type: Boolean,
         default: false
       }
