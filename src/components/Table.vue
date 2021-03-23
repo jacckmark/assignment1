@@ -74,6 +74,11 @@
         totalPageAmount: 0
       }
     },
+    watch: {
+      usersList: function (value) {
+        this.$emit('userListChanged', value);
+      }
+    },
     props: {
       endpoint: {
         type: String,

@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <Table :endpoint="this.tableUrl" :tableColumns="columns" />
+    <Table
+      :endpoint="this.tableUrl"
+      :tableColumns="columns"
+      @userListChanged="listChangedEvent"
+    />
   </div>
 </template>
 
@@ -25,6 +29,11 @@
         ]
       };
     },
+    methods: {
+      listChangedEvent(usersList) {
+        console.log(`Userslist changed to: `, usersList)
+      }
+    }
   };
 </script>
 
